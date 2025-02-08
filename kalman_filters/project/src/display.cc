@@ -82,6 +82,36 @@ void Display::destroyRenderer() {
   }
 }
 
+void Display::setDrawColour(uint8_t red, uint8_t green, uint8_t blue,
+                            uint8_t alpha) {
+  SDL_SetRenderDrawColor(mRenderer, red, green, blue, alpha);
+}
+
+void Display::drawLine(const Vector2 &startPos, const Vector2 &endPos) {
+  Vector2 p1 = transformPoint(startPos);
+  Vector2 p2 = transformPoint(endPos);
+  SDL_RenderDrawLine(mRenderer, p1.x, p1.y, p2.x, p2.y);
+}
+
+Vector2 Display::transformPoint(const Vector2 &point) {
+  double dx = point.x - mViewXOffset;
+  double dy = point.y - mViewYOffset;
+  double y = mScreenHeight - (dx / mViewHeight) * mScreenHeight;
+  double x = (dy / mViewWidth) * mScreenWidth;
+  return Vector2(x, y);
+}
+
+void Display::drawLines(const std::vector<Vector2> &points) {
+  for (unsigned int i = 1; i < points.size(); ++i) {
+    drawLine(points[i - 1], points[i]);
+  }
+}
+void Display::drawLines(const std::vector<std::vector<Vector2>> &dataset) {
+  for (const std::vector<Vector2> &points : dataset) {
+    drawLines(points);
+  }
+}
+
 void Display::setView(double width, double height, double xOffset,
                       double yOffset) {
   mViewWidth = fabs(width);
@@ -139,6 +169,30 @@ offsetPoints(const std::vector<std::vector<Eigen::Vector2d>> &dataset,
   std::vector<std::vector<Eigen::Vector2d>> transformedDataset;
   for (const std::vector<Eigen::Vector2d> &points : dataset) {
     transformedDataset.push_back(offsetPoints(points, offset));
+  }
+  return transformedDataset;
+}
+
+std::vector<Vector2> transformPoints(const std::vector<Vector2> &points,
+                                     const Vector2 &position,
+                                     const double rotation) {
+  double ctheta = cos(rotation);
+  double stheta = sin(rotation);
+  std::vector<Vector2> transformedPoints;
+  for (const Vector2 &point : points) {
+    double x = point.x * ctheta - stheta * point.y + position.x;
+    double y = point.x * stheta + ctheta * point.y + position.y;
+    transformedPoints.push_back(Vector2(x, y));
+  }
+  return transformedPoints;
+}
+
+std::vector<std::vector<Vector2>>
+transformPoints(const std::vector<std::vector<Vector2>> &dataset,
+                const Vector2 &position, const double rotation) {
+  std::vector<std::vector<Vector2>> transformedDataset;
+  for (const std::vector<Vector2> points : dataset) {
+    transformedDataset.push_back(transformPoints(points, position, rotation));
   }
   return transformedDataset;
 }

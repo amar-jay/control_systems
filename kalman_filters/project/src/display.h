@@ -28,7 +28,13 @@ public:
   bool createRenderer(std::string title, int screenWidth, int screenHeight);
   void destroyRenderer();
 
+  void setDrawColour(uint8_t red, uint8_t green, uint8_t blue,
+                     uint8_t alpha = 0xFF);
   void setView(double width, double height, double xOffset, double yOffset);
+  void setView(double xOffset, double yOffset);
+  void drawLine(const Vector2 &startPos, const Vector2 &endPos);
+  void drawLines(const std::vector<Vector2> &points);
+  void drawLines(const std::vector<std::vector<Vector2>> &points);
 
   void showScreen();
   void clearScreen();

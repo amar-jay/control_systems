@@ -33,6 +33,15 @@ int main(int argc, char *args[]) {
 
     mDisplay.showScreen();
 
+    // Draw Background Grid
+    mDisplay.setDrawColour(101, 101, 101);
+    for (int x = -GRID_SIZE; x <= GRID_SIZE; x += GRID_SPACEING) {
+      mDisplay.drawLine(Vector2(x, -GRID_SIZE), Vector2(x, GRID_SIZE));
+    }
+    for (int y = -GRID_SIZE; y <= GRID_SIZE; y += GRID_SPACEING) {
+      mDisplay.drawLine(Vector2(-GRID_SIZE, y), Vector2(GRID_SIZE, y));
+    }
+
     SDL_Event event;
     while (SDL_PollEvent(&event) != 0) {
       if (event.type == SDL_QUIT) {
