@@ -5,6 +5,9 @@ This repository serves as my structured learning path for mastering **control sy
 
 This roadmap is designed to keep me on track while learning these. Implementation is important, but **theoretical understanding is key**—so I will regularly document notes & insights, test and run simulations. 
 
+#### NOTES:
+- [My Notes](https://amarjay.vercel.app/posts/prob-robots-notes/)
+
 ### **📝 Learning Checklist**
 
 #### **1️⃣ Foundations of Control & Estimation**
